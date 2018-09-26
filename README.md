@@ -28,7 +28,43 @@ async drawShare() {
     });
     wx.hideLoading();
   });
-},
+}
+```
+#### 保存图片
+```
+// 保存分享图片
+saveImage() {
+  wx.canvasToTempFilePath({
+    x: 0,
+    y: 0,
+    width: 325,
+    height: 489,
+    canvasId: 'shareCanvas',
+    success: res => {
+      wx.saveImageToPhotosAlbum({
+        filePath: res.tempFilePath,
+        success: (res) => {
+          this.setData({ shareImgShow: false }, () => {
+            setTimeout(() => {
+              this.setData({ shareGuideShow: true });
+            }, 200);
+          });
+        },
+        fail(res) {
+          console.log(res);
+        },
+        complete(res) {
+          console.log(res);
+        }
+      });
+    },
+    fail: err => {
+      setTimeout(() => {
+        this.handleCanvarToImg();
+      }, 200);
+    }
+  });
+}
 ```
 ##### 上述代码中，使用promise将童书的封面（服务器端获取到的图片）暂存到本地，获取一个本地链接，这是因为canvas不能绘制外部链接图片。
-##### 最近项目比较忙，后悔会讲解具体绘制思路。 未完待续...
+##### 最近项目比较忙，后续会讲解具体绘制思路及方法。 未完待续...
